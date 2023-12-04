@@ -1,0 +1,31 @@
+{
+    "recipes": [
+      {
+        "id":1,
+        "name": "Idly",
+        "ingredients": ["2 cups idly rice", "1 cup urad dal (black gram)", "Salt to taste"],
+        "method": ["Wash the idly rice and urad dal separately...", "..."]
+      },
+      {    "id":2,
+        "name": "Palkova",
+        "ingredients": ["1 liter full-fat milk", "1/2 cup sugar", "1/2 teaspoon cardamom powder"],
+        "method": ["Boil the milk in a heavy-bottomed pan...", "..."]
+      },
+      {    "id":3,
+        "name": "Ratatouille",
+        "ingredients": ["1 eggplant, diced", "1 zucchini, diced", "1 yellow bell pepper, diced", "1 red bell pepper, diced", "1 onion, chopped", "2 tomatoes, diced", "3 cloves garlic, minced", "2 tablespoons olive oil", "1 teaspoon dried thyme", "Salt and pepper to taste"],
+        "method": ["Preheat the oven to 375°F (190°C)...", "..."]
+      },
+      {    "id":4,
+        "name": "Poori",
+        "ingredients": ["2 cups whole wheat flour", "1/2 cup water (approximately)", "Salt to taste", "Oil for frying"],
+        "method": ["In a large bowl, mix whole wheat flour and salt...", "..."]
+      },
+      {    "id":5,
+        "name": "Halwa",
+        "ingredients": ["1 cup semolina (sooji)", "1 cup sugar", "1/2 cup ghee (clarified butter)", "2 cups water", "1/2 teaspoon cardamom powder", "Cashews and raisins for garnish"],
+        "method": ["In a pan, roast semolina in ghee until it turns golden brown...", "..."]
+      }
+    ]
+  }
+  
