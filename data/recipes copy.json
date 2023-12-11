@@ -1,0 +1,152 @@
+{
+  "recipes": [
+    {
+      "id": 1,
+      "name": "Idly",
+      "ingredients": [
+        "Urad dal",
+        "Idly rice",
+        "Salt"
+      ],
+      "method": [
+        "Soak urad dal and idly rice separately.",
+        "Grind them to a smooth batter.",
+        "Mix and ferment overnight.",
+        "Steam in idly molds."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Dosa",
+      "ingredients": [
+        "Urad dal",
+        "Rice",
+        "Fenugreek seeds",
+        "Salt"
+      ],
+      "method": [
+        "Soak urad dal, rice, and fenugreek seeds.",
+        "Grind them to a smooth batter.",
+        "Ferment overnight.",
+        "Spread on a hot griddle to make dosas."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Pittu",
+      "ingredients": [
+        "Rice flour",
+        "Grated coconut",
+        "Salt"
+      ],
+      "method": [
+        "Mix rice flour and grated coconut with salt.",
+        "Steam the mixture in cylindrical pittu molds."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Biryani",
+      "ingredients": [
+        "Basmati rice",
+        "Chicken or vegetables",
+        "Onions",
+        "Tomatoes",
+        "Spices"
+      ],
+      "method": [
+        "Cook basmati rice separately.",
+        "Prepare the chicken or vegetable curry.",
+        "Layer rice and curry in a pot, and cook together."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Masala Tea",
+      "ingredients": [
+        "Tea leaves",
+        "Water",
+        "Milk",
+        "Sugar",
+        "Spices (ginger, cardamom, cloves)"
+      ],
+      "method": [
+        "Boil water and tea leaves together.",
+        "Add spices and milk, simmer.",
+        "Strain and add sugar to taste."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Idiyappam",
+      "ingredients": [
+        "Rice flour",
+        "Water",
+        "Salt"
+      ],
+      "method": [
+        "Mix rice flour, water, and salt to form a dough.",
+        "Press through a mold to create strands.",
+        "Steam idiyappam."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Appam",
+      "ingredients": [
+        "Rice flour",
+        "Coconut milk",
+        "Yeast",
+        "Sugar"
+      ],
+      "method": [
+        "Mix rice flour, coconut milk, yeast, and sugar.",
+        "Ferment the batter.",
+        "Cook appams in special pans."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Poori",
+      "ingredients": [
+        "Wheat flour",
+        "Water",
+        "Salt",
+        "Oil for frying"
+      ],
+      "method": [
+        "Mix wheat flour, water, and salt to form a dough.",
+        "Roll into small discs and deep fry."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Pundi",
+      "ingredients": [
+        "Rice flour",
+        "Coconut",
+        "Salt"
+      ],
+      "method": [
+        "Mix rice flour, grated coconut, and salt.",
+        "Shape into small dumplings and steam."
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Pani Puri",
+      "ingredients": [
+        "Semolina (sooji)",
+        "Water",
+        "Tamarind chutney",
+        "Spiced water",
+        "Boiled potatoes",
+        "Chickpeas"
+      ],
+      "method": [
+        "Prepare small puris from semolina.",
+        "Make a hole and fill with spiced water, tamarind chutney, potatoes, and chickpeas."
+      ]
+    }
+  ]
+}

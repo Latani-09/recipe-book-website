@@ -1,11 +1,45 @@
-.container {
-  min-height: 100vh;
-  padding: 0 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 16px;
 }
+
+.galleryItem {
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #b13d3d; /* Border around each gallery item */
+  border-radius: 8px; /* Optional: Adds rounded corners to the items */
+  overflow: hidden; /* Optional: Hides overflowing content within the item */
+}
+.image-container {
+  width: 280px;
+  height: 180px;
+  overflow: hidden;
+}
+
+.resizable-image {
+  width: 100%; /* Make sure the image takes the full width of the container */
+  height: auto; /* Maintain the image's aspect ratio */
+  object-fit: cover; /* Crop the image to cover the container */
+}
+
+.recipeItem h2{
+  text-align: center;
+  text-decoration: wavy;
+
+}
+
+.recipeItem img {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+
+
+
 
 .title a {
   color: #0070f3;
@@ -22,37 +56,23 @@
   margin: 0 0 1rem;
   line-height: 1.15;
   font-size: 3.6rem;
-}
-
-.title {
-  text-align: center;
-}
-
-.title,
-.description {
   text-align: center;
 }
 
 .description {
   line-height: 1.5;
   font-size: 1.5rem;
+  text-align: center;
 }
 
-.grid {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
 
-  max-width: 800px;
-  margin-top: 3rem;
-}
+
 
 .card {
   margin: 1rem;
   flex-basis: 45%;
   padding: 1.5rem;
-  text-align: left;
+  text-align: center;
   color: inherit;
   text-decoration: none;
   border: 1px solid #eaeaea;
@@ -84,9 +104,99 @@
   height: 1em;
 }
 
-@media (max-width: 600px) {
-  .grid {
-    width: 100%;
-    flex-direction: column;
-  }
+
+
+/* styles/RecipeCard.module.css */
+
+.recipeCard {
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  padding: 24px;
+  margin: auto; /* Center the card */
+  max-width: 600px; /* Limit the maximum width */
+  width: 100%; /* Fill the available width */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.recipeCard h1 {
+  font-size: 28px;
+  margin-bottom: 16px;
+  color: rgb(86, 29, 29);
+}
+
+.recipeCard h2 {
+  font-size: 22px;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.cardItems {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cardItems li {
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.cardStep {
+  list-style-type: decimal;
+  padding: 0;
+  margin: 0;
+}
+
+.cardStep li {
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.form {
+  max-width: 600px;
+  margin: 0 auto;
+  display:block;
+
+}
+
+.form label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #333;
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #555;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.form input:focus,
+.textarea:focus {
+  border-color: #0070f3;
+}
+
+.form button {
+  background-color: #0070f3;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.form button:hover {
+  background-color: #0056b3;
+}
+
