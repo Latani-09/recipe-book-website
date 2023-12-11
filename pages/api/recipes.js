@@ -75,7 +75,8 @@ export default async function handler(req, res) {
 
       await fs.writeFile(filePath, JSON.stringify(recipesData, null, 2), 'utf-8');
 
-      res.status(200).json({ success: true });}
+      res.status(200).json({ success: true });
+      }
       else {res.status(500).json({ error:"recipe  already found with submitted name." });}
       
   } catch (error) {
