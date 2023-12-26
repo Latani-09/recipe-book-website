@@ -1,13 +1,38 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import Link from 'next/link';
-import { useState } from 'react';
-import { getAllRecipes } from './api/recipes';
-
+import { getAllRecipes } from './api/recipes'
+import { useEffect, useState } from 'react'
+import io from 'socket.io-client'
+let socket;
 export default function Home({recipes}) {
   const [searchItem, setSearchItem] = useState('')
   const [filteredRecipes, setFilteredRecipes] = useState(recipes)
+    const [input, setInput] = useState('')
+  
+    useEffect(() =>{
+      async function socketInitializer(){
+      await fetch('/api/socket');
+      socket = io()
+  
+      socket.on('connect', () => {
+        console.log('connected')
+      })
+  
+      socket.on('update-input', msg => {
+        setInput(msg)
+      })
+      }
+      socketInitializer();
+    },[]);
 
+  
+    const onChangeHandler = (e) => {
+      setInput(e.target.value)
+      socket.emit('input-change', e.target.value)
+    }
+  
+  
 
   const handleInputChange = (e) => { 
     debugger
@@ -21,6 +46,7 @@ export default function Home({recipes}) {
       setFilteredRecipes(filteredItems);
       console.log('filtered',filteredRecipes)
   }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -43,7 +69,12 @@ export default function Home({recipes}) {
         <button ><Link href={"./recipes/addRecipe/"}>Add Recipe</Link>
 </button>
         
-        <div>      
+        <div>   
+        <input
+        placeholder="Type something"
+        value={input}
+        onChange={onChangeHandler}
+      />   
       <input
         type="text"
         value={searchItem}
@@ -171,6 +202,7 @@ export default function Home({recipes}) {
     </div>
   );
 }
+
 export async function getStaticProps() {
   const recipes = await getAllRecipes();
   return {

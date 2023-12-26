@@ -6,9 +6,9 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({apiKey:'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'});
 
-async function chat() {
+async function chat(message) {
   const completion = await openai.chat.completions.create({
-    messages: [{ role: "system", content: "You are a helpful assistant." }],
+    messages: [{ role: "system", content: message }],
     model: "gpt-3.5-turbo",
   });
 
@@ -65,7 +65,7 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
       console.log('body',req.body, typeof(req.body));
     try {
-        const {question: questionData } =req.body;
+        const {message: questionData } =req.body;
         debugger
         console.log('Question',questionData)
         chat()

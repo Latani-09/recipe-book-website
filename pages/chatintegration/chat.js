@@ -1,52 +1,38 @@
-import Head from 'next/head';
 
-import styles from '../../styles/Home.module.css';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react'
+import io from 'socket.io-client'
+let socket;
 
+const chat = () => {
+  const [input, setInput] = useState('')
 
-const chat =() => {
-    const [question, setQuestion] = useState('');
-const text ="how to make idly?"
-const handleQuestionChange = (e) => {
-    setQuestion(e.target.value);
-  };
-const handleSubmit = async(e) => {
-    e.preventDefault();
+  useEffect(() => socketInitializer(), [])
 
-const response = await fetch(`http://localhost:3000/api/chatgpt`,{
-      
-      method:'POST', 
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify( text) ,
-    });
+  const socketInitializer = async () => {
+    await fetch('/api/socket');
+    socket = io()
+
+    socket.on('connect', () => {
+      console.log('connected')
+    })
+
+    socket.on('update-input', msg => {
+      setInput(msg)
+    })
+  }
+
+  const onChangeHandler = (e) => {
+    setInput(e.target.value)
+    socket.emit('input-change', e.target.value)
+  }
+
+  return (
+    <input
+      placeholder="Type something"
+      value={input}
+      onChange={onChangeHandler}
+    />
+  )
 }
-return (
-    <div className={styles.container}>
-      <Head>
-        <title>Recipe book</title>
-        <link rel="icon" href="/pngegg.ico" />
-      </Head>
-      <main>
-      <h1 className={styles.title}>
-           Moms' diary
-      </h1>
-        <p className={styles.description}>
-         Save your recipes here!
-        </p>
-        <div>
-        <form onSubmit={handleSubmit}>
-      <label>
-        question:
-        <input type="text" value={question} onChange={handleQuestionChange} />
-      </label>
-      <button type="submit">Ask assistance</button>
-    </form>
-    </div>
-    </main>
-    </div>
-    );
-}
+
 export default chat;
