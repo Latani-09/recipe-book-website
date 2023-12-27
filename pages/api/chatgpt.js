@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { Assistant } from 'openai/resources/beta/assistants/assistants';
 import OpenAI from 'openai';
-
+/*
 
 const openai = new OpenAI({apiKey:'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'});
 
@@ -60,6 +60,7 @@ export async function POST(request) {
   };
 }
 */
+/*
 export default async function handler(req, res) {
     console.log('method isss',req.method)
     if (req.method === 'POST') {
@@ -79,3 +80,4 @@ export default async function handler(req, res) {
     }
     } 
 }
+*/
