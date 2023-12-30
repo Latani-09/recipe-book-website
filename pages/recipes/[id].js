@@ -4,9 +4,10 @@ import { useState,useEffect } from 'react';
 import { io } from 'socket.io-client';
 import styles from '../../styles/Home.module.css';
 import Head from 'next/head';
-import { Form,Navbar,Nav,OverlayTrigger,Container,Card, CardBody, CardHeader, Button,Spinner } from 'react-bootstrap';
+import { Form,Navbar,Nav,OverlayTrigger,Container,Card, CardBody, CardHeader, Button,Spinner, CardFooter } from 'react-bootstrap';
 let socket;
 export default function  recipe({recipe}) {
+
   const recipenotfound=(!recipe.recipe)
   const router = useRouter();
   const title=recipe.recipe.name;
@@ -17,6 +18,7 @@ export default function  recipe({recipe}) {
   const = useState(title);
   const [editedSteps, setEditedSteps] = useState(steps);
   const [editedIngredients,setEditedIngredients]=useState(ingredients)*/
+  const [input, setInput] = useState('')
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle]  = useState(title);
   const [editedIngredients, setEditedIngredients] = useState(recipe_ingredients); // Initial ingredient input
@@ -24,6 +26,7 @@ export default function  recipe({recipe}) {
   const [chatHistory, setChatHistory] = useState([]);
   const [response,setResponse]  =useState('')
   const [loading, setLoading] = useState(false);
+  const [currentmsg,setmsg]=useState('')
   console.log('before edit',editedIngredients,editedSteps)
 
   const handleEditClick = () => {
@@ -131,17 +134,25 @@ let prevChatHistory=[]
       socketInitializer();
     },[]);
     const handleReceivedMessage = (msg) => {
-      setChatHistory((prevChatHistory) => [...prevChatHistory, msg]);
+      setmsg(msg)
       console.log(chatHistory)
       console.log(typeof(chatHistory))
+      setLoading(false)
+      
     };
+    const onChangeHandler = (e) => {
+      setInput(e.target.value)
+    }
      const handleSendChat = (e) => {
       
       {
-        const question=JSON.stringify(recipe.recipe)+" how to make the recipe perfect or more tasty"
+        if (currentmsg!=''){setChatHistory((prevChatHistory) => [...prevChatHistory, [question,currentmsg]]);}
+        const chatHistory_str=prevChatHistory.join(",");
+        //const question=JSON.stringify(recipe.recipe)+" give one tip on one step to make the recipe better.do'nt exceed 10 words"+"other than "+chatHistory_str
+        const question=JSON.stringify(recipe.recipe)+input
              setResponse('')
              setLoading(true)
-             console.log("handle sedn chat -------", JSON.stringify(recipe.recipe)+"how to make the recipe perfect or more tasty")
+             console.log("handle sedn chat -------", question)
              socket.emit("input-change",question);
          }
      }
@@ -180,7 +191,8 @@ let prevChatHistory=[]
   {recipenotfound ? (<div>Recipe not found</div>):(
   <div>
   {!isEditing ?(
-    <div>
+    <div className='row'>
+     <div className="col-md-6">
     <h1 >
       {editedTitle}
     </h1>
@@ -217,25 +229,49 @@ let prevChatHistory=[]
     </ul>
   </CardBody>
 </Card>
-             <button type="button" onClick={handleSendChat}>
-                Add magic to recipe
-              </button>
+</div>
+<div className="col-md-6">
+      <Card style={{ border: '2px solid #ccc', borderRadius: '10px', height: 'auto', backgroundColor:'ButtonShadow' }}>
           <div className={styles.chatHistory}>
-            {loading && (
+            <div>
+              {(prevChatHistory!=[]) ? (<div>{prevChatHistory.map((msg, index) => (
+              <div key={index} className={styles.chatMessage} style={{height:'auto'}}>
+                <h6>Question: {msg[0]}</h6>
+                <p>Answer: {msg[1]}</p>
+              </div>
+              
+            ))}
+            </div>):(<div></div>)
+            }
+            </div>
+            {loading ?(
               <div className="text-center">
                 <Spinner animation="border" role="status">
                   <span className="visually-hidden"></span>
                 </Spinner>
               </div>
-            )}
-            {chatHistory.map((msg, index) => (
-              <div key={index} className={styles.chatMessage}>
-                {msg}
-              </div>
-            ))}
-          </div>
+            ):(<div> {currentmsg}
+            </div>)}
 
-</div>
+          </div>
+        </Card>
+        <Card style={{ border: '2px solid #ccc', borderRadius: '10px' ,marginTop:'10px'}}>
+        <div className={styles.chatInput}>
+              <input 
+                type="text"
+                placeholder="Ask questions about the recipe"
+                value={input}
+                onChange={onChangeHandler}
+                style={{height:'auto',width:'90%'}}
+              />
+              <button type="button" onClick={handleSendChat} style={{height:'auto',width:'10%',}}>
+                Ask
+              </button>
+            </div>
+      
+      </Card>
+    </div>
+  </div>
   ):(
   <Form>
       <Form.Group className="mb-3" controlId="formGroupEmail" >

@@ -2,7 +2,8 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react'
 import io from 'socket.io-client'
 import {Nav,Navbar }from 'react-bootstrap';
-import { Container ,Spinner,Row,Col,OverlayTrigger} from 'react-bootstrap';
+import { Container ,Spinner,Card,CardBody} from 'react-bootstrap';
+import styles from '../../styles/Home.module.css';
 let socket;
 export default function chatwithgpt() {
   const [input, setInput] = useState('')
@@ -74,36 +75,31 @@ export default function chatwithgpt() {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-          
-        <div className={styles.chat}>
-        <div className={styles.chatInput}>
-              <input
-                type="text"
-                placeholder="Type something"
-                value={input}
-                onChange={onChangeHandler}
-              />
-              <button type="button" onClick={handleSendChat}>
-                Send
+    <div className="col-md-6">
+      <Card style={{ border: '2px solid #ccc', borderRadius: '10px', height: '20%', backgroundColor:'InfoBackground' }}>
+
+              <CardBody>
+              <button type="button" onClick={handleSendChat} style={{width:'30%'}}>
+                Ask
               </button>
-            </div>
-          <div>
           <div className={styles.chatHistory}>
-            {loading && (
+
+            {loading ?(
               <div className="text-center">
                 <Spinner animation="border" role="status">
                   <span className="visually-hidden"></span>
                 </Spinner>
               </div>
-            )}
-            {chatHistory.map((msg, index) => (
+            ):(<div> {chatHistory.map((msg, index) => (
               <div key={index} className={styles.chatMessage}>
                 {msg}
               </div>
-            ))}
+            ))}</div>)}
+
           </div>
-          </div>
-        </div>
+        </CardBody>
+      </Card>
+    </div>
     </main>
     <style jsx>{`
       main {

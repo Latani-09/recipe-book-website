@@ -28,7 +28,7 @@ const SocketHandler = async(req, res) => {
   res.end()
 }
 //const openai = new OpenAI({apiKey:'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'});
-const openai = new OpenAI({apiKey:'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'});
+const openai = new OpenAI({apiKey:'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'});
 async function chat(message) {
   const completion = await openai.chat.completions.create({
     messages: [{ role: "system", content: message }],
