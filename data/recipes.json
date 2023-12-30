@@ -7,7 +7,7 @@
       "ingredients": [
         "Urad dal",
         "Idly rice",
-        "Salt"
+        "coconut"
       ],
       "method": [
         "Soak urad dal and idly rice separately.",
@@ -290,27 +290,13 @@
     },
     {
       "id": 18,
-      "name": "new",
-      "img": "",
+      "name": "chocolate cake ",
+      "img": "./pics/design-1703900570190.jpg",
       "ingredients": [
-        "a",
-        "b",
-        "c"
+        "flour "
       ],
       "method": [
-        ""
-      ]
-    },
-    {
-      "id": 19,
-      "name": "new2",
-      "img": "",
-      "ingredients": [
-        "1",
-        "2"
-      ],
-      "method": [
-        ""
+        "mix all ingredients"
       ]
     }
   ]

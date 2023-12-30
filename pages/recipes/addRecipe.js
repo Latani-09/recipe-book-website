@@ -4,10 +4,14 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { Navbar,Nav,Container,Form, Button } from 'react-bootstrap';
 const addRecipe =() => {
+
   const router = useRouter();
   const [recipeTitle, setRecipeTitle] = useState('');
   const [ingredients, setIngredients] = useState(['']); // Initial ingredient input
   const [steps, setSteps] = useState(['']);
+  const [image, setImage] = useState(null);
+  const [createObjectURL, setCreateObjectURL] = useState(null);
+
   const handleTitleChange = (e) => {
     setRecipeTitle(e.target.value);
   };
@@ -48,13 +52,42 @@ const addRecipe =() => {
     // Process the form data (e.g., send it to the server)
     console.log('Recipe Title:', recipeTitle);
     console.log('Ingredients:', ingredients);
+
+    
+
+    var originalFilename=""
+    const body = new FormData();
+    // console.log("file", image)
+    body.append("file", image);    
+    const uploadresponse = await fetch("/api/upload", {
+      method: "POST",
+      body
+    
+    })
+    .then((response) => {
+      // Check if the response status is OK (status code 200)
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      // Parse the JSON from the response body
+      return response.json();
+    })
+    .then((data) => {
+      // Access the originalFilename from the response
+      console.log(data)
+      originalFilename = data.filename;
+  })
+      // Use the originalFilename as needed in your client-side code
+
+    const path="./pics/"
     const formData={
       recipe:{
       "id":20,
       "name":recipeTitle,
-      "img":"",
+      "img":path+originalFilename,
       "ingredients":ingredients,
-      "method":['']}
+      "method":steps}
   }
     const response = await fetch(`http://localhost:3000/api/recipes`,{
       method:'POST', 
@@ -68,7 +101,32 @@ const addRecipe =() => {
       router.push('/')
     }
 
+
   }
+
+
+
+  const uploadToClient = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const i = event.target.files[0];
+
+      setImage(i);
+      setCreateObjectURL(URL.createObjectURL(i));
+    }
+  };
+
+  const uploadToServer = async (event) => {        
+    const body = new FormData();
+    // console.log("file", image)
+    body.append("file", image);    
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body
+    });
+  
+
+
+}
   return (
 
     <div className={styles.container}>
@@ -147,7 +205,20 @@ const addRecipe =() => {
         position:'right'
       }}>Submit Recipe</Button>
     </Form>
-
+    <div>
+      <div>
+        <img src={createObjectURL} />
+        <h4>Select Image</h4>
+        <input type="file" name="myImage" onChange={uploadToClient} />
+        <button
+          className="btn btn-primary"
+          type="submit"
+          onClick={uploadToServer}
+        >
+          Send to server
+        </button>
+      </div>
+    </div>
     </main>
     </div>
     );};
