@@ -6,30 +6,9 @@ import {  useState } from 'react'
 import {Nav,Navbar,Container } from 'react-bootstrap';
 
 export default function Home({recipes}) {
-  const [searchItem, setSearchItem] = useState('')
+  
   const [filteredRecipes, setFilteredRecipes] = useState(recipes)
-  const [input, setInput] = useState('')
-    const onChangeHandler = (e) => {
-      setInput(e.target.value)
-    }
-
-  const handleInputChange = (e) => { 
-    debugger
-    const searchTerm = e.target.value;
-    setSearchItem(searchTerm)
-  console.log('recipes' , recipes)}
-  const handleSearch = (e) => { 
-    debugger
-    const searchTerm = e.target.value;
-    setSearchItem(searchTerm)
-  console.log('recipes' , recipes)
-  const filteredItems = recipes.filter((recipe) =>
-    recipe[0].toLowerCase().includes(searchTerm.toLowerCase())
-    );
-      setFilteredRecipes(filteredItems);
-      console.log('filtered',filteredRecipes)
-  }
-
+ 
   return (
     <div className={styles.container}>
     <Head>
@@ -43,14 +22,20 @@ export default function Home({recipes}) {
       <link rel="icon" href="/pngegg.ico" />
     </Head>
   <main>
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container>
-        <Navbar.Brand href="/">Mom's recipe</Navbar.Brand>
+  <Navbar expand="lg" className="bg-body-tertiary mb-4  justify-content-between" >
+  <Container className="d-flex flex-row align-items-start">
+  <Navbar.Brand href="/" >
+  <h1 style={{ color: 'green', fontStyle: 'oblique', fontSize: '3rem', marginBottom: '3' }}>
+    Mom's recipe
+  </h1>
+</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end" style={{  marginLeft: '100px',fontSize: '1.2rem' }}>
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/recipes/addRecipe">Add Recipe</Nav.Link>
+            <Nav.Link href="/chatintegration/chat">Ask ChatGPT</Nav.Link>
+            <Nav.Link href="/">About app</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -152,3 +137,26 @@ export async function getStaticProps() {
     },
   };
 }
+/* const [input, setInput] = useState('')
+ const [searchItem, setSearchItem] = useState('')
+    const onChangeHandler = (e) => {
+      setInput(e.target.value)
+    }
+
+  const handleInputChange = (e) => { 
+    debugger
+    const searchTerm = e.target.value;
+    setSearchItem(searchTerm)
+  console.log('recipes' , recipes)}
+  const handleSearch = (e) => { 
+    debugger
+    const searchTerm = e.target.value;
+    setSearchItem(searchTerm)
+  console.log('recipes' , recipes)
+  const filteredItems = recipes.filter((recipe) =>
+    recipe[0].toLowerCase().includes(searchTerm.toLowerCase())
+    );
+      setFilteredRecipes(filteredItems);
+      console.log('filtered',filteredRecipes)
+  }
+*/

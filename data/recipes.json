@@ -7,13 +7,15 @@
       "ingredients": [
         "Urad dal",
         "Idly rice",
-        "coconut"
+        "coconut",
+        "onion",
+        "fennel seeds"
       ],
       "method": [
         "Soak urad dal and idly rice separately.",
         "Grind them to a smooth batter.",
         "Mix and ferment overnight.",
-        "Steam in idly molds."
+        "steam in idly cooker"
       ]
     },
     {
@@ -54,31 +56,13 @@
       "ingredients": [
         "Basmati rice",
         "Chicken or vegetables",
-        "Onions",
         "Tomatoes",
-        "Spices"
+        "spices"
       ],
       "method": [
         "Cook basmati rice separately.",
         "Prepare the chicken or vegetable curry.",
         "Layer rice and curry in a pot, and cook together."
-      ]
-    },
-    {
-      "id": 5,
-      "name": "Masala Tea",
-      "img": null,
-      "ingredients": [
-        "Tea leaves",
-        "Water",
-        "Milk",
-        "Sugar",
-        "Spices (ginger, cardamom, cloves)"
-      ],
-      "method": [
-        "Boil water and tea leaves together.",
-        "Add spices and milk, simmer.",
-        "Strain and add sugar to taste."
       ]
     },
     {
@@ -196,7 +180,7 @@
     {
       "id": 13,
       "name": "Samosa",
-      "img": " ./pics/samosa",
+      "img": null,
       "ingredients": [
         "Potatoes",
         "Peas",
@@ -271,7 +255,7 @@
       ]
     },
     {
-      "id": 17,
+      "id": 18,
       "name": "Spaghetti",
       "img": " ./pics/spaghetti.jpg",
       "ingredients": [
@@ -289,14 +273,18 @@
       ]
     },
     {
-      "id": 18,
+      "id": 17,
       "name": "chocolate cake ",
       "img": "./pics/design-1703900570190.jpg",
       "ingredients": [
-        "flour "
+        "flour  ",
+        "sugar",
+        "egg",
+        "choco powder"
       ],
       "method": [
-        "mix all ingredients"
+        "mix all ingredients",
+        "bake"
       ]
     }
   ]

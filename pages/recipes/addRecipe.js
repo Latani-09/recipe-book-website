@@ -141,14 +141,17 @@ const addRecipe =() => {
       <link rel="icon" href="/pngegg.ico" />
     </Head>
     <main>
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-body-tertiary" >
       <Container>
-        <Navbar.Brand href="/">Mom's recipe</Navbar.Brand>
+        <Navbar.Brand 
+        href="/"><h1 style={{  color:'green', fontStyle:'oblique'}}>Mom's recipe</h1></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/recipes/addRecipe">Add Recipe</Nav.Link>
+            <Nav.Link href="/chatintegration/chat">Ask ChatGPT</Nav.Link>
+            <Nav.Link href="/">About app</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
@@ -200,25 +203,19 @@ const addRecipe =() => {
           Add steps
         </Button>
       </Form.Group>
+      <div>
+      <div>
+        <img src={createObjectURL} />
+        <h4>Select Image</h4>
+        <input type="file" name="myImage" onChange={uploadToClient} />
+      </div>
+    </div>
       <Button type="submit" onClick={handleSubmit}
        style={{
         position:'right'
       }}>Submit Recipe</Button>
     </Form>
-    <div>
-      <div>
-        <img src={createObjectURL} />
-        <h4>Select Image</h4>
-        <input type="file" name="myImage" onChange={uploadToClient} />
-        <button
-          className="btn btn-primary"
-          type="submit"
-          onClick={uploadToServer}
-        >
-          Send to server
-        </button>
-      </div>
-    </div>
+
     </main>
     </div>
     );};

@@ -59,14 +59,17 @@ export default function chatwithgpt() {
       <link rel="icon" href="/pngegg.ico" />
     </Head>
     <main>
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-body-tertiary  mb-4" >
       <Container>
-        <Navbar.Brand href="/">Mom's recipe</Navbar.Brand>
+        <Navbar.Brand 
+        href="/"><h1 style={{  color:'green', fontStyle:'oblique'}}>Mom's recipe</h1></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/recipes/addRecipe">Add Recipe</Nav.Link>
+            <Nav.Link href="/chatintegration/chat">Ask ChatGPT</Nav.Link>
+            <Nav.Link href="/">About app</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

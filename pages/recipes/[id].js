@@ -1,33 +1,57 @@
 import { useRouter } from 'next/router';
 import { getAllRecipeIds,getRecipeData } from '../api/recipes.js';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
+import { io } from 'socket.io-client';
 import styles from '../../styles/Home.module.css';
 import Head from 'next/head';
-import { Navbar,Nav,OverlayTrigger,Container,Card, CardBody, CardHeader, Button } from 'react-bootstrap';
+import { Form,Navbar,Nav,OverlayTrigger,Container,Card, CardBody, CardHeader, Button,Spinner } from 'react-bootstrap';
+let socket;
 export default function  recipe({recipe}) {
+  const recipenotfound=(!recipe.recipe)
   const router = useRouter();
   const title=recipe.recipe.name;
-  const steps=recipe.recipe.method;
-  const ingredients=recipe.recipe.ingredients;
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(title);
+  const recipe_steps=recipe.recipe.method;
+  const recipe_ingredients=recipe.recipe.ingredients;
+  /*
+
+  const = useState(title);
   const [editedSteps, setEditedSteps] = useState(steps);
-  const [editedIngredients,setEditedIngredients]=useState(ingredients)
+  const [editedIngredients,setEditedIngredients]=useState(ingredients)*/
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle]  = useState(title);
+  const [editedIngredients, setEditedIngredients] = useState(recipe_ingredients); // Initial ingredient input
+  const [editedSteps, setEditedSteps] = useState(recipe_steps);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [response,setResponse]  =useState('')
+  const [loading, setLoading] = useState(false);
   console.log('before edit',editedIngredients,editedSteps)
 
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
+  const handleAddIngredient = () => {
+    setEditedIngredients([...editedIngredients, '']);
+  };
+  const handleAddSteps = () => {
+    setEditedSteps([...editedSteps, '']);
+  };
+  const handleRemoveIngredient = (index) => {
+    const newIngredients = [...editedIngredients];
+    newIngredients.splice(index, 1);
+    setEditedIngredients(newIngredients);
+  };
   const handleSaveClick = async() => {
     setIsEditing(false);
     const formData={
       recipe:{
       "id":recipe.recipe.id,
       "name":editedTitle,
+      "img":recipe.recipe.img,
       "ingredients":editedIngredients,
       "method":editedSteps}
   }
+  console.log('data sent from client',formData)
     const response = await fetch(`http://localhost:3000/api/recipes`,{
       method:'PUT', 
       headers: {
@@ -54,7 +78,12 @@ export default function  recipe({recipe}) {
     updatedIngredients[index] = newValue;
     setEditedIngredients(updatedIngredients);
   };
-
+  const handleRemoveSteps= (index) => {
+    const newSteps = [...editedSteps];
+    newSteps.splice(index, 1);
+    setEditedSteps(newSteps);
+  };
+  
   const handleDelete = async () => {
     try {
       console.log('recipe id ',recipe.recipe.id)
@@ -79,24 +108,46 @@ export default function  recipe({recipe}) {
   };
   console.log(recipe);
   console.log(recipe.recipe.ingredients)
-  if (!recipe.recipe) {
-    return (
-      <div className={styles.container}>
-      <Head>
-      <title>Recipe book</title>
-     <link rel="icon" href="/pngegg.ico" />
-      </Head>
-      <h1 className={styles.title}>
-          Moms' diary
-      </h1>
-      <p className={styles.description}>
-      Save your recipes here!
-      </p>
-      <div>Recipe not found</div>;
-      </div>);
-  }
+
+
+////chat integration
+let prevChatHistory=[]
+    useEffect(() =>{
+      async function socketInitializer(){
+      await fetch('/api/socket');
+      socket = io()
+      socket.on('connect', () => {
+        console.log('Connected to server:', socket.id);
+      });
+      
+      socket.on('update-input', async(msg) => {
+        console.log("msg received from server" ,msg)
+         await handleReceivedMessage(msg);
+      });
+      
+    
+      }
+
+      socketInitializer();
+    },[]);
+    const handleReceivedMessage = (msg) => {
+      setChatHistory((prevChatHistory) => [...prevChatHistory, msg]);
+      console.log(chatHistory)
+      console.log(typeof(chatHistory))
+    };
+     const handleSendChat = (e) => {
+      
+      {
+        const question=JSON.stringify(recipe.recipe)+" how to make the recipe perfect or more tasty"
+             setResponse('')
+             setLoading(true)
+             console.log("handle sedn chat -------", JSON.stringify(recipe.recipe)+"how to make the recipe perfect or more tasty")
+             socket.emit("input-change",question);
+         }
+     }
 
   return (
+    
 <div className={styles.container}>
   <Head>
     <title>Recipe book</title>
@@ -109,23 +160,28 @@ export default function  recipe({recipe}) {
     <link rel="icon" href="/pngegg.ico" />
   </Head>
   <main>
-    <Navbar expand="lg" className="bg-body-tertiary" >
+    <Navbar expand="lg" className="bg-body-tertiary  mb-4" >
       <Container>
         <Navbar.Brand 
-        href="/"><h1 style={{  color:'mint', fontStyle:'oblique'}}>Mom's recipe</h1></Navbar.Brand>
+        href="/"><h1 style={{  color:'green', fontStyle:'oblique'}}>Mom's recipe</h1></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/recipes/addRecipe">Add Recipe</Nav.Link>
+            <Nav.Link href="/chatintegration/chat">Ask ChatGPT</Nav.Link>
+            <Nav.Link href="/">About app</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   </main>
   <div>
-    
-    <h1 contentEditable={isEditing} onBlur={handleTitleChange}>
+  {recipenotfound ? (<div>Recipe not found</div>):(
+  <div>
+  {!isEditing ?(
+    <div>
+    <h1 >
       {editedTitle}
     </h1>
     <Card style={{ border: '2px solid #ccc', borderRadius: '10px', marginBottom:'10px'}}>
@@ -137,8 +193,6 @@ export default function  recipe({recipe}) {
       {editedIngredients.map((ingredient, index) => (
         <li
           key={index}
-          contentEditable={isEditing}
-          onBlur={(e) => handleIngredientsChange(index, e.target.textContent)}
         >
           {ingredient}
         </li>
@@ -156,8 +210,6 @@ export default function  recipe({recipe}) {
       {editedSteps.map((step, index) => (
         <li
           key={index}
-          contentEditable={isEditing}
-          onBlur={(e) => handleStepChange(index, e.target.textContent)}
         >
           {step}
         </li>
@@ -165,7 +217,76 @@ export default function  recipe({recipe}) {
     </ul>
   </CardBody>
 </Card>
-  {isEditing ? (
+             <button type="button" onClick={handleSendChat}>
+                Add magic to recipe
+              </button>
+          <div className={styles.chatHistory}>
+            {loading && (
+              <div className="text-center">
+                <Spinner animation="border" role="status">
+                  <span className="visually-hidden"></span>
+                </Spinner>
+              </div>
+            )}
+            {chatHistory.map((msg, index) => (
+              <div key={index} className={styles.chatMessage}>
+                {msg}
+              </div>
+            ))}
+          </div>
+
+</div>
+  ):(
+  <Form>
+      <Form.Group className="mb-3" controlId="formGroupEmail" >
+        <Form.Label>Recipe Title:</Form.Label>
+        <Form.Control type="text" placeholder="Enter recipe name"  onChange={handleTitleChange} value={editedTitle}  />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formGroupPassword">
+        <Form.Label> Ingredients:</Form.Label>
+        {editedIngredients.map((ingredient, index) => (
+          <div key={index} className="d-flex mb-2">
+            <Form.Control
+              type="text"
+              value={ingredient}
+              onChange={(e) => handleIngredientsChange(index, e.target.value)}
+              className="mr-2"
+            />
+            {index > 0 && (
+              <Button type="button" onClick={() => handleRemoveIngredient(index)}>
+                Remove
+              </Button>
+            )}
+          </div>
+        ))}
+          <Button type="button" onClick={handleAddIngredient}>
+          Add ingredients
+        </Button>
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formGroupPassword">
+        <Form.Label> Steps:</Form.Label>
+        {editedSteps.map((step, index) => (
+          <div key={index} className="d-flex mb-2" >
+            <Form.Control
+              type="text"
+              value={step}
+              onChange={(e) => handleStepChange(index, e.target.value)}
+              className="mr-2"
+            />
+            {index > 0 && (
+              <Button type="button" onClick={() => handleRemoveSteps(index)}>
+                Remove
+              </Button>
+            )}
+          </div>
+        ))}
+         <Button type="button" onClick={handleAddSteps}>
+          Add steps
+        </Button>
+      </Form.Group>
+    </Form>
+  )}
+{isEditing ? (
       <Button onClick={handleSaveClick}>Save</Button>
        
   ) : (
@@ -174,10 +295,12 @@ export default function  recipe({recipe}) {
   <Button style={{ marginLeft: '10px' }} onClick={handleDelete}>
     Delete Recipe
   </Button>
-  </div>
 </div>
+  )};
+  </div>
+  </div>
   );
-};
+  };
 export async function getStaticPaths() {
   const paths = await getAllRecipeIds();
   debugger
