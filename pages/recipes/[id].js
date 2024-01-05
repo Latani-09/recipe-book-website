@@ -4,7 +4,7 @@ import { useState,useEffect } from 'react';
 import { io } from 'socket.io-client';
 import styles from '../../styles/Home.module.css';
 import Head from 'next/head';
-import { Form,Navbar,Nav,OverlayTrigger,Container,Card, CardBody, CardHeader, Button,Spinner, CardFooter } from 'react-bootstrap';
+import { Form,Navbar,Nav,Container,Card, CardBody, CardHeader, Button,Spinner } from 'react-bootstrap';
 let socket;
 export default function  recipe({recipe}) {
 
@@ -24,9 +24,9 @@ export default function  recipe({recipe}) {
   const [editedIngredients, setEditedIngredients] = useState(recipe_ingredients); // Initial ingredient input
   const [editedSteps, setEditedSteps] = useState(recipe_steps);
   const [chatHistory, setChatHistory] = useState([]);
+  const [question,setquestion]=useState('')
   const [response,setResponse]  =useState('')
   const [loading, setLoading] = useState(false);
-  const [currentmsg,setmsg]=useState('')
   console.log('before edit',editedIngredients,editedSteps)
 
   const handleEditClick = () => {
@@ -124,6 +124,7 @@ let prevChatHistory=[]
       });
       
       socket.on('update-input', async(msg) => {
+        
         console.log("msg received from server" ,msg)
          await handleReceivedMessage(msg);
       });
@@ -134,26 +135,40 @@ let prevChatHistory=[]
       socketInitializer();
     },[]);
     const handleReceivedMessage = (msg) => {
-      setmsg(msg)
+      
+      setResponse(msg) 
+      console.log(msg)
       console.log(chatHistory)
       console.log(typeof(chatHistory))
+      console.log('Received message:', msg);
       setLoading(false)
-      
-    };
+
+    };  
     const onChangeHandler = (e) => {
       setInput(e.target.value)
     }
      const handleSendChat = (e) => {
       
       {
-        if (currentmsg!=''){setChatHistory((prevChatHistory) => [...prevChatHistory, [question,currentmsg]]);}
+        debugger
+        
+        if (response!=''){setChatHistory((prevChatHistory) => [...prevChatHistory, [question,response]]);
+          
+        }
+        let questiontosend="";
+        setquestion(input)
+          questiontosend=JSON.stringify({instruction:"give the answers to the following question by refering to the recipe and other resources. answer FORMAT: html, if any question is  not related to recipe give answer as '<p>Question seems to be not related </p>'",recipe:recipe.recipe,question:input})
+          
+
+         
+        console.log('chat history----------------------------------', chatHistory)
         const chatHistory_str=prevChatHistory.join(",");
         //const question=JSON.stringify(recipe.recipe)+" give one tip on one step to make the recipe better.do'nt exceed 10 words"+"other than "+chatHistory_str
-        const question=JSON.stringify(recipe.recipe)+input
              setResponse('')
              setLoading(true)
-             console.log("handle sedn chat -------", question)
-             socket.emit("input-change",question);
+             console.log("handle send chat -------", questiontosend)
+             if (questiontosend!=''){
+             socket.emit("input-change",questiontosend);}
          }
      }
 
@@ -231,17 +246,18 @@ let prevChatHistory=[]
 </Card>
 </div>
 <div className="col-md-6">
-      <Card style={{ border: '2px solid #ccc', borderRadius: '10px', height: 'auto', backgroundColor:'ButtonShadow' }}>
+      <Card style={{ height: 'auto', backgroundColor:'ButtonShadow' }}>
           <div className={styles.chatHistory}>
             <div>
-              {(prevChatHistory!=[]) ? (<div>{prevChatHistory.map((msg, index) => (
+              {((chatHistory.length !== 0)) ? (<div>{chatHistory.map((msg, index) => (
               <div key={index} className={styles.chatMessage} style={{height:'auto'}}>
-                <h6>Question: {msg[0]}</h6>
-                <p>Answer: {msg[1]}</p>
-              </div>
-              
-            ))}
-            </div>):(<div></div>)
+                <div style={{border:'2px solid #ccc',borderRadius: '10px', height: 'auto',marginRight:'20px'}} > {msg[0]}</div>
+                <p>response:</p>
+                <div dangerouslySetInnerHTML={{ __html: msg[1] }}  style={{border:'2px solid #ccc',borderRadius: '20px', height: 'auto', marginLeft:'10px'}} />
+              </div>))
+            }
+            </div>)
+            :(<div></div>)
             }
             </div>
             {loading ?(
@@ -250,8 +266,15 @@ let prevChatHistory=[]
                   <span className="visually-hidden"></span>
                 </Spinner>
               </div>
-            ):(<div> {currentmsg}
-            </div>)}
+            ):(<div  className={styles.chatMessage} style={{height:'auto'}}>
+                  <div  style={{border:'2px solid #ccc',borderRadius: '10px', height: 'auto', marginRight:'20px'}}>
+                      <h6 style={{marginTop:'10px'}}> Question: {question}</h6>
+                  </div>
+                  <div style={{border:'2px solid #ccc',borderRadius: '20px', height: 'auto', marginLeft:'10px'}}>
+                      <div dangerouslySetInnerHTML={{ __html: response }}  style={{marginTop:'10px'}} />
+                  </div>
+               </div>)
+            }
 
           </div>
         </Card>
