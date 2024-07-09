@@ -14,17 +14,17 @@ const SocketHandler = async(req, res) => {
     res.socket.server.io = io
   }
     io.on('connect', socket => {
-        console.log('connected')
+        console.log('connected',socket.id)
       socket.on('input-change', async (userInput) => {
         console.log("reaching chatgpt")
-        console.log(userInput)
+        console.log(socket.id,userInput)
         // Handle user input, interact with ChatGPT, and emit the response
         const chatGPTResponse = await chat(userInput);
         if (chatGPTResponse.error){
 
         }
         else{   
-          console.log('response',chatGPTResponse)
+          console.log('response',socket.id,chatGPTResponse)
         socket.emit('update-input', chatGPTResponse);}
      
       });

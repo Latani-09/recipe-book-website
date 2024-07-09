@@ -260,7 +260,7 @@ let prevChatHistory=[]
             :(<div></div>)
             }
             </div>
-            {loading ?(
+            {(loading ) ?(
               <div className="text-center">
                 <Spinner animation="border" role="status">
                   <span className="visually-hidden"></span>
